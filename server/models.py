@@ -36,10 +36,11 @@ class Trail(db.Model, SerializerMixin):
     votes = db.Column(db.Integer)
 
     comments = db.relationship("Comment", backref = "trail")
+    # usertrails = db.relationship( 'UserTrail', backref = 'trail' )
     usertrails = db.relationship( 'UserTrail', backref = 'trail' )
 
 
-    serialize_rules = ('-comments','-comments.trails' ,'-created_at', '-updated_at')
+    serialize_rules = ('-usertrails.trail','-comments.trail' ,'-created_at', '-updated_at')
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, default=db.func.now(), onupdate=db.func.now())
 
@@ -47,7 +48,8 @@ class Trail(db.Model, SerializerMixin):
 
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
-    id = db.Column(db.Integer, primary_key = True)
+    id = db.Column(db.Integer, primary_key=True)
+    user_name = db.Column(db.String)
     name = db.Column(db.String)
     email = db.Column(db.String)
     password = db.Column(db.String)
@@ -59,11 +61,11 @@ class User(db.Model, SerializerMixin):
 
     # relationships have jonah check cus what is going on here
     usertrails = db.relationship( 'UserTrail', backref = 'user' )
-    trails = association_proxy( 'user_trails', 'trails' )
+    # trails = association_proxy( 'user_trails', 'trails' )
 
     comments = db.relationship( 'Comment', backref = 'user' )
 
-    serialize_rules = ('-usertrails','-trails.users' ,'-created_at', '-updated_at')
+    serialize_rules = ('-usertrails.user','-comments.user','-created_at', '-updated_at')
 
 
 class Comment(db.Model, SerializerMixin):
@@ -80,7 +82,7 @@ class Comment(db.Model, SerializerMixin):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, default=db.func.now(), onupdate=db.func.now())
 
-    serialize_rules = ('-user.comments','trail.comments','-trails.users' ,'-created_at', '-updated_at')
+    serialize_rules = ('-user.comments','-trail.comments','-user.usertrails','-trail.usertrails','-created_at', '-updated_at')
 
 class UserTrail(db.Model, SerializerMixin):
     __tablename__ = 'user_trails'
@@ -90,7 +92,7 @@ class UserTrail(db.Model, SerializerMixin):
     ridden = db.Column(db.Boolean)
     wishlist = db.Column(db.Boolean)
 
-    serialize_rules = ('-user.usertrails','trail.usertrails','-trails.users' ,'-created_at', '-updated_at')
+    serialize_rules = ('-user.usertrails','-trail.usertrails','-trail.comments','-user.comments','-created_at', '-updated_at')
 
     
     
