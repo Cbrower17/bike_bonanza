@@ -13,7 +13,6 @@ metadata = MetaData(naming_convention={
 })
 db = SQLAlchemy(metadata=metadata)
 
-
 class Trail(db.Model, SerializerMixin):
     __tablename__ = 'trails'
     id = db.Column(db.Integer, primary_key=True)
@@ -36,6 +35,11 @@ class Trail(db.Model, SerializerMixin):
     # longitude = db.Column(db.Integer)
     votes = db.Column(db.Integer)
 
+    comments = db.relationship("Comment", backref = "trail")
+    usertrails = db.relationship( 'UserTrail', backref = 'trail' )
+
+
+    serialize_rules = ('-comments','-comments.trails' ,'-created_at', '-updated_at')
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(
         db.DateTime, default=db.func.now(), onupdate=db.func.now())
@@ -47,17 +51,19 @@ class User(db.Model, SerializerMixin):
     name = db.Column(db.String)
     email = db.Column(db.String)
     password = db.Column(db.String)
-
+    profile_picture = db.Column(db.String)
+    
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(
         db.DateTime, default=db.func.now(), onupdate=db.func.now())
 
     # relationships have jonah check cus what is going on here
-    usertrails = db.relationship('Usertrails', backref='users')
-    trails = association_proxy('user_trails', 'trails')
+    usertrails = db.relationship( 'UserTrail', backref = 'user' )
+    trails = association_proxy( 'user_trails', 'trails' )
 
-    serialize_rules = ('-user_trails', '-trails.users',
-                       '-created_at', '-updated_at')
+    comments = db.relationship( 'Comment', backref = 'user' )
+
+    serialize_rules = ('-usertrails','-trails.users' ,'-created_at', '-updated_at')
 
 
 class Comment(db.Model, SerializerMixin):
@@ -73,15 +79,20 @@ class Comment(db.Model, SerializerMixin):
     updated_at = db.Column(
         db.DateTime, default=db.func.now(), onupdate=db.func.now())
 
+    serialize_rules = ('-user.comments','trail.comments','-trails.users' ,'-created_at', '-updated_at')
 
 class UserTrail(db.Model, SerializerMixin):
     __tablename__ = 'user_trails'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    trail_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    trail_id = db.Column(db.Integer, db.ForeignKey('trails.id'))
     ridden = db.Column(db.Boolean)
     wishlist = db.Column(db.Boolean)
 
+    serialize_rules = ('-user.usertrails','trail.usertrails','-trails.users' ,'-created_at', '-updated_at')
+
+    
+    
     # serialize_rules = ('-leases','-apartments.tenants' ,'-created_at', '-updated_at')
 
     created_at = db.Column(db.DateTime, server_default=db.func.now())
