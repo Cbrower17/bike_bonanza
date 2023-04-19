@@ -143,6 +143,16 @@ class check_login(Resource):
             return res
 api.add_resource(check_login, '/checklogin')
 
+class check_logged_in(Resource):
+    def get(self):
+        user_id = session.get('user_id')
+        if user_id:
+            if user_id != None:
+                return make_response({"logged_in": True},200)
+        return make_response({"logged_in": False},200)
+    
+api.add_resource(check_logged_in, '/check')
+
 class logout(Resource):
     def delete(self):
         session['user_id'] = None
