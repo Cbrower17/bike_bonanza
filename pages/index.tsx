@@ -3,6 +3,9 @@ import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { use } from 'react'
+import Trails from './Trails'
+import {useState} from 'react'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -27,6 +30,13 @@ export async function getServerSideProps() {
 
 
 export default function App({trails, users}) {
+  const router = useRouter();
+  const [showTrails, setShowTrails] = useState(false)
+
+  const handleShowTrails = () => {
+    setShowTrails(!showTrails);
+  };
+
   return (
     <>
 <div className="navbar bg-base-100">
@@ -36,8 +46,27 @@ export default function App({trails, users}) {
         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h7" /></svg>
       </label>
       <ul tabIndex={0} className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
-        <li>
-          <Link href="trails">Trails</Link>
+        <li> 
+          <Link href="/trails">Trails</Link>
+          <button onClick={handleShowTrails}>Show Trails</button>
+      {showTrails && (
+        <ul>
+          {trails.map((trail) => (
+            <li key={trail.id}>
+              <Link href={{ pathname: '/trails', query: { trailId: trail.id } }}>
+                {trail.name}
+                <br />
+                {trail.city}
+                <br />
+                {trail.thumbnail}
+                <br />
+
+                {/* wanting to display name city, thumbnail */}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
           </li>
         <li>
           <Link href ="/users">Users</Link>
@@ -61,6 +90,7 @@ export default function App({trails, users}) {
     </button>
   </div>
 </div>
+
     </>
   )
 }
