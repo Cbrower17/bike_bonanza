@@ -31,12 +31,9 @@ class Trail(db.Model, SerializerMixin):
     rating = db.Column(db.Float)
     thumbnail = db.Column(db.String)
 
-    # latitude = db.Column(db.Integer)
-    # longitude = db.Column(db.Integer)
     votes = db.Column(db.Integer)
 
     comments = db.relationship("Comment", backref = "trail")
-    # usertrails = db.relationship( 'UserTrail', backref = 'trail' )
     usertrails = db.relationship( 'UserTrail', backref = 'trail' )
 
 
@@ -85,7 +82,7 @@ class Comment(db.Model, SerializerMixin):
 
 class UserTrail(db.Model, SerializerMixin):
     __tablename__ = 'user_trails'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True) 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     trail_id = db.Column(db.Integer, db.ForeignKey('trails.id'))
     ridden = db.Column(db.Boolean)
@@ -94,8 +91,6 @@ class UserTrail(db.Model, SerializerMixin):
     serialize_rules = ('-user.usertrails','-trail.usertrails','-trail.comments','-user.comments','-created_at', '-updated_at')
 
     
-    
-    # serialize_rules = ('-leases','-apartments.tenants' ,'-created_at', '-updated_at')
 
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(
