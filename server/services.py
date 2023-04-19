@@ -1,5 +1,5 @@
 from flask import Flask
-# from flask_bcrypt import Bcrypt
+from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 
@@ -11,5 +11,5 @@ metadata = MetaData(naming_convention={
     "pk": "pk_%(table_name)s"
     })
 app = Flask(__name__)
-# bcrypt = Bcrypt(app)
+bcrypt = Bcrypt(app)
 db = SQLAlchemy(metadata=metadata)
