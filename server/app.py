@@ -2,8 +2,8 @@ from flask import Flask, make_response, jsonify, request, session
 from flask_migrate import Migrate
 from flask_restful import Api,Resource
 from flask_cors import CORS
-from flask_bcrypt import Bcrypt
-from services import app,bcrypt,db
+# from flask_bcrypt import Bcrypt
+from services import app,db
 
 from models import db, User, UserTrail, Trail, Comment
 
