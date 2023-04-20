@@ -24,7 +24,27 @@ export default function index({users}) {
         return <div>loading</div>
     } 
   return (
-    <div>index</div>
+    <div>
+        <ul>
+            {users.map((user)=> (
+                <li key = {user.id}>
+                    <div className="card w-96 bg-base-100 shadow-xl">
+                    <figure className="px-10 pt-10">
+                     <img src={user.profile_picture} alt="Cute Pic" className="rounded-xl" />
+                    </figure>
+                    <div className="card-body items-center text-center">
+                     <h2 className="card-title">{user.name}</h2>
+                    <p></p>
+                    <div className="card-actions">
+                    {/* <button className="btn btn-primary">Buy No</button> */}
+                    </div>
+                </div>
+                </div>
+                </li>
+            ))}
+        </ul>
+
+    </div>
   )
 }
 

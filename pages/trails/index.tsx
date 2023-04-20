@@ -37,23 +37,27 @@ export default function index({trails}){
                 <div className="card-body">
                  <h2 className="card-title">
                  {trail.name}
-                    <div className="badge badge-secondary">Votes</div>
+                 <button className="btn btn-secondary">Votes</button>
                     </h2>
-                <p>{trail.city}</p>
+                <p>{trail.city}, {trail.region}</p>
                 <div className="card-actions justify-end">
-            <div className="badge badge-outline">Ridden</div>
-            <div className="badge badge-outline">Wishlist</div>
-            </div>
-            </div>
-            </div>
+                <div className="form-control">
+                <label className="label cursor-pointer">
+                    <span className="label-text">Ridden</span> 
+                    <input type="checkbox" checked className="checkbox" />
+                </label>
+                </div>
+                <div className="form-control">
+                <label className="label cursor-pointer">
+                    <span className="label-text">Wishlist</span> 
+                    <input type="checkbox" checked className="checkbox" />
+                </label>
+                    </div>
+                    </div>
+                    </div>
+                    </div>
+            <br/>
                 {/* <Link href={{ pathname: '/trails', query: { trailId: trail.id } }}> */}
-                
-                <br />
-                
-                <br />
-                {trail.thumbnail}
-                <br />
-
                 {/* wanting to display name city, thumbnail */}
               {/* </Link> */}
               </li>  
