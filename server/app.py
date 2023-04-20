@@ -90,13 +90,13 @@ class AddUser(Resource):
         try:
             input = request.get_json()
             new_user = User(
-                name=input['name'], email=input['email'], password=input['password'])
+                name=input['name'], email=input['email'], password_hash=input['password'], profile_picture = input['profile_picture'], user_name = input['username'])
             db.session.add(new_user)
             db.session.commit()
-            return make_response(new_user.users.to_dict(), 201)
-        except:
+            return make_response(new_user.to_dict(), 201)
+        except Exception as e:
             return make_response({
-                "errors": ["validation errors"]
+                "errors": [e.__str__()]
             }, 400)
 
 
@@ -130,15 +130,17 @@ api.add_resource(AllUserTrails, '/usertrails')
 
 class Login(Resource):
     def post(self):
-        jsoned_request = request.get_json()
-        user = User.query.filter(User.name == jsoned_request["name"]).first()
-        if user.authenticate(jsoned_request["password"]):
-            session['user_id'] = user.id
-            res = make_response(jsonify(user.to_dict()),200)
-            return res
-        else:
-            res = make_response(jsonify({ "login" : "Invalid User"}),500)
-            return res
+        try:
+            jsoned_request = request.get_json()
+            user = User.query.filter(User.name == jsoned_request["name"]).first()
+            if user.authenticate(jsoned_request["password"]):
+                session['user_id'] = user.id
+                res = make_response(jsonify(user.to_dict()),200)
+                return res
+        except Exception as e:
+            return make_response({
+                "errors": [e.__str__()]
+            }, 400)
 
         
 api.add_resource(Login, '/login')
@@ -151,6 +153,16 @@ class check_login(Resource):
             res = make_response(jsonify(user.to_dict()),200)
             return res
 api.add_resource(check_login, '/checklogin')
+
+class check_logged_in(Resource):
+    def get(self):
+        user_id = session.get('user_id')
+        if user_id:
+            if user_id != None:
+                return make_response({"logged_in": True},200)
+        return make_response({"logged_in": False},200)
+    
+api.add_resource(check_logged_in, '/check')
 
 class logout(Resource):
     def delete(self):

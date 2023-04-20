@@ -44,13 +44,13 @@ export default function index({trails}){
                 <div className="form-control">
                 <label className="label cursor-pointer">
                     <span className="label-text">Ridden</span> 
-                    <input type="checkbox" checked className="checkbox" />
+                    {/* <input type="checkbox" checked className="checkbox" /> */}
                 </label>
                 </div>
                 <div className="form-control">
                 <label className="label cursor-pointer">
                     <span className="label-text">Wishlist</span> 
-                    <input type="checkbox" checked className="checkbox" />
+                    {/* <input type="checkbox" checked className="checkbox" /> */}
                 </label>
                     </div>
                     </div>
