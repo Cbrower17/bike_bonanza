@@ -92,7 +92,6 @@ with app.app_context():
         user = User(
             name = fake.name(),
             email = fake.email(),
-            password = fake.word(),
             profile_picture = 'https://s14761.pcdn.co/wp-content/uploads/2020/09/Propain-spindrift-cf-2021-enduro-test-review36-810x551.jpg'
 
         )
