@@ -48,7 +48,7 @@ class Trail(db.Model, SerializerMixin):
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
-    user_name = db.Column(db.String)
+    user_name = db.Column(db.String,nullable = False)
     name = db.Column(db.String)
     email = db.Column(db.String)
     _password_hash = db.Column(db.String)
