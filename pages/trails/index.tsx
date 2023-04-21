@@ -7,9 +7,9 @@ import { useRouter } from 'next/router'
 
 
 
-export async function getServerSideProps() {
-    const trailsRes = await fetch('http://127.0.0.1:5555/trails?limit=10');
-    const trailsData = await trailsRes.text();
+export const getStaticProps = async() => {
+    const res = await fetch('http://127.0.0.1:5555/trails');
+    const trailsData = await res.text();
     // console.log('Trails Response:', trailsData);
     const trails = JSON.parse(trailsData)
   
@@ -31,7 +31,7 @@ export default function index({trails}){
     <div>
         <ul>
             {trails.map((trail) => (
-              <li key={trail.id}>
+              <Link href = {'/trails/' + trail.id} key={trail.id}>
                 <div className="card w-96 bg-base-100 shadow-xl">
                 <figure><img src={trail.thumbnail} alt="Trail Thumbnail" /></figure>
                 <div className="card-body">
@@ -44,23 +44,23 @@ export default function index({trails}){
                 <div className="form-control">
                 <label className="label cursor-pointer">
                     <span className="label-text">Ridden</span> 
-                    <input type="checkbox" checked className="checkbox" />
+                    {/* <input type="checkbox" checked className="checkbox" /> */}
                 </label>
                 </div>
                 <div className="form-control">
                 <label className="label cursor-pointer">
                     <span className="label-text">Wishlist</span> 
-                    <input type="checkbox" checked className="checkbox" />
+                    {/* <input type="checkbox" checked className="checkbox" /> */}
                 </label>
                     </div>
                     </div>
                     </div>
                     </div>
-            <br/>
+                    <br/>
                 {/* <Link href={{ pathname: '/trails', query: { trailId: trail.id } }}> */}
                 {/* wanting to display name city, thumbnail */}
               {/* </Link> */}
-              </li>  
+              </Link>  
             ))}
         </ul>
     </div>

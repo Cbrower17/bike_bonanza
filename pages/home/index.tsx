@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 import { use } from 'react'
 // import Trails from './Trails'
 import {useState} from 'react'
+import Weather from '@/components/weather'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -39,6 +40,7 @@ export default function App({trails, users}) {
 
   return (
     <>
+    <Weather />
 <div className="navbar bg-base-100">
   <div className="navbar-start">
     <div className="dropdown">
