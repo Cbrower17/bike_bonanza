@@ -23,7 +23,7 @@ export default function App({ Component, pageProps }) {
 
   return (
     <>
-      <Navbar setcurrUser={setcurrUser}/>
+      <Navbar setcurrUser={setcurrUser} currUser={currUser}/>
       <Component {...pageProps} currUser ={currUser} setcurrUser={setcurrUser} setloggedIn={setloggedIn} loggedIn={loggedIn}/>
     </>
   )

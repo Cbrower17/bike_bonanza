@@ -8,9 +8,17 @@ import Trails from "../pages/Trails";
 import { useState } from "react";
 import setcurrUser from "../pages/_app"
 
-export default function Navbar({setcurrUser}) {
+
+
+
+
+export default function Navbar({currUser,setcurrUser}) {
+  if (!currUser) {
+    return <div className="text-dblue">Loading.. </div>;
+  }
   const router = useRouter();
   const [showTrails, setShowTrails] = useState(false);
+  console.log(currUser)
 
   const handleShowTrails = () => {
     setShowTrails(!showTrails);
@@ -29,7 +37,7 @@ export default function Navbar({setcurrUser}) {
 
   return (
     <>
-      <div className="navbar bg-base-100 fixed z-2">
+      <div className="navbar bg-base-100">
         <div className="navbar-start">
           <div className="dropdown">
             <label tabIndex={0} className="btn btn-ghost btn-circle">
@@ -57,6 +65,7 @@ export default function Navbar({setcurrUser}) {
                 <button onClick={handleShowTrails}>Show Trails</button>
                 <button onClick={handleLogout}>Logout</button>
                 <Link href="/users">Users</Link>
+                <Link as = {`user/${currUser.id}`} href="/user/[something]">account</Link>
               </li>
               <li>
                 <a>About</a>

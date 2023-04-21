@@ -154,6 +154,7 @@ export default function Home({currUser,setcurrUser, loggedIn}) {
     
     return (
       <>
+      <Link as = {`user/${'test'}`} href="/user/[something]">Link</Link>
       <form onSubmit={handleSubmitlogin}>
         <p>Username</p>
         <input

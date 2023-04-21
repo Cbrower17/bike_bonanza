@@ -10,6 +10,7 @@ import { cursorTo } from "readline";
 
 const inter = Inter({ subsets: ["latin"] });
 
+
 export async function getServerSideProps() {
   const trailsRes = await fetch("http://127.0.0.1:5555/trails");
   const trailsData = await trailsRes.text();
@@ -30,12 +31,17 @@ export async function getServerSideProps() {
 }
 
 export default function App({ trails, users, currUser}) {
-  const router = useRouter();
-  const [showTrails, setShowTrails] = useState(false);
+  if (!currUser) {
+    return <div className="text-dblue">Loading.. </div>;
+  }
   if(!currUser){
+    const router = useRouter();
     console.log("Pushing")
     router.push('/')
-    }
+  }
+  const router = useRouter();
+  const [showTrails, setShowTrails] = useState(false);
+  console.log(!currUser)
 
   const handleShowTrails = () => {
     setShowTrails(!showTrails);
@@ -110,7 +116,8 @@ export default function App({ trails, users, currUser}) {
           </div>
         </div>
       </div>
-      <h1>Welcom, {currUser.name}</h1>
+      <h1>Welcome, {currUser.name}</h1>
+      <Link as = {`user/${currUser.id}`} href="/user/[something]">Link</Link>
       <img src={currUser.profile_picture} alt="profile picture" />
     </>
   );
