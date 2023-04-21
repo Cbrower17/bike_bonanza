@@ -4,7 +4,7 @@ import Link from 'next/link'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 
-export async function getServerSideProps() {
+export async function getServerSideProps({currUser}) {
     const usersInfo = await fetch('http://127.0.0.1:5555/users');
     const usersData = await usersInfo.text()
     // console.log('Users Response:', usersData)
@@ -25,10 +25,10 @@ export default function index({users}) {
     } 
   return (
     <div>
-        <ul>
+        <ul className = "items-center">
             {users.map((user)=> (
-                <li key = {user.id}>
-                    <div className="card w-96 bg-base-100 shadow-xl">
+                <li key = {user.id} className="pb-10">
+                    <div className="card w-96 bg-base-100 shadow-xl ">
                     <figure className="px-10 pt-10">
                      <img src={user.profile_picture} alt="Cute Pic" className="rounded-xl" />
                     </figure>

@@ -1,98 +1,125 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import { use } from 'react'
+import Head from "next/head";
+import Image from "next/image";
+import { Inter } from "next/font/google";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { use } from "react";
 // import Trails from './Trails'
-import {useState} from 'react'
-import Weather from '@/components/weather'
+import { useState } from "react";
+import { cursorTo } from "readline";
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
+
 
 export async function getServerSideProps() {
-  const trailsRes = await fetch('http://127.0.0.1:5555/trails');
+  const trailsRes = await fetch("http://127.0.0.1:5555/trails");
   const trailsData = await trailsRes.text();
   // console.log('Trails Response:', trailsData);
-  const trails = JSON.parse(trailsData)
+  const trails = JSON.parse(trailsData);
 
-  const usersInfo = await fetch('http://127.0.0.1:5555/users');
-  const usersData = await usersInfo.text()
+  const usersInfo = await fetch("http://127.0.0.1:5555/users");
+  const usersData = await usersInfo.text();
   // console.log('Users Response:', usersData)
-  const users = JSON.parse(usersData)
+  const users = JSON.parse(usersData);
 
   return {
-        props: {
-          trails,
-          users
-        },
-      }
-    }
+    props: {
+      trails,
+      users,
+    },
+  };
+}
 
-
-export default function App({trails, users}) {
+export default function App({ trails, users, currUser}) {
+  if (!currUser) {
+    return <div className="text-dblue">Loading.. </div>;
+  }
+  if(!currUser){
+    const router = useRouter();
+    console.log("Pushing")
+    router.push('/')
+  }
   const router = useRouter();
-  const [showTrails, setShowTrails] = useState(false)
+  const [showTrails, setShowTrails] = useState(false);
+  console.log(!currUser)
 
   const handleShowTrails = () => {
     setShowTrails(!showTrails);
   };
-
+  console.log(currUser)
+  if (!currUser) {
+    return (
+    <>
+    <h2>Please login </h2>
+    <h2>L</h2>
+      
+    </>
+    );
+  } else {
   return (
     <>
-    <Weather />
-<div className="navbar bg-base-100">
-  <div className="navbar-start">
-    <div className="dropdown">
-      <label tabIndex={0} className="btn btn-ghost btn-circle">
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h7" /></svg>
-      </label>
-      <ul tabIndex={0} className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
-        <li> 
-          <Link href="/trails">Trails</Link>
-          {/* <button onClick={handleShowTrails}>Show Trails</button> */}
-      {showTrails && (
-        <ul>
-          {trails.map((trail) => (
-            <li key={trail.id}>
-              <Link href={{ pathname: '/trails', query: { trailId: trail.id } }}>
-                {trail.name}
-                <br />
-                {trail.city}
-                <br />
-                {trail.thumbnail}
-                <br />
-
-              </Link>
-            </li>
-          ))}
-        </ul>
-      )}
-          </li>
-        <li>
-          <Link href ="/users">Users</Link>
-          </li>
-        <li><a>About</a></li>
-      </ul>
-    </div>
-  </div>
-  <div className="navbar-center">
-    <a className="btn btn-ghost normal-case text-xl">Bike Bonanza</a>
-  </div>
-  <div className="navbar-end">
-    <button className="btn btn-ghost btn-circle">
-      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-    </button>
-    <button className="btn btn-ghost btn-circle">
-      <div className="indicator">
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
-        <span className="badge badge-xs badge-primary indicator-item"></span>
+      <div className="carousel w-full">
+        <div id="slide1" className="carousel-item relative w-full">
+          <img
+            src="https://bikerumor.com/wp-content/uploads/2019/10/where-to-ride-knoxville-urban-wilderness-mountain-bike-trails-18.jpg"
+            className="w-full"
+          />
+          <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+            <a href="#slide4" className="btn btn-circle">
+              ❮
+            </a>
+            <a href="#slide2" className="btn btn-circle">
+              ❯
+            </a>
+          </div>
+        </div>
+        <div id="slide2" className="carousel-item relative w-full">
+          <img
+            src="https://savemountdiablo.org/wp-content/uploads/2022/03/https___cdn.evbuc_.com_images_122398495_301400668710_1_original-1.jpg"
+            className="w-full"
+          />
+          <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+            <a href="#slide1" className="btn btn-circle">
+              ❮
+            </a>
+            <a href="#slide3" className="btn btn-circle">
+              ❯
+            </a>
+          </div>
+        </div>
+        <div id="slide3" className="carousel-item relative w-full">
+          <img
+            src="https://www.canyon.com/on/demandware.static/-/Library-Sites-canyon-shared/default/dwf77f4fb8/images/blog/Mountain/official-mtb-trails-germany-main.jpg"
+            className="w-full"
+          />
+          <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+            <a href="#slide2" className="btn btn-circle">
+              ❮
+            </a>
+            <a href="#slide4" className="btn btn-circle">
+              ❯
+            </a>
+          </div>
+        </div>
+        <div id="slide4" className="carousel-item relative w-full">
+          <img
+            src="https://media2.giphy.com/media/l0MYRFJOjJMCvvSuI/giphy.gif"
+            className="w-full"
+          />
+          <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+            <a href="#slide3" className="btn btn-circle">
+              ❮
+            </a>
+            <a href="#slide1" className="btn btn-circle">
+              ❯
+            </a>
+          </div>
+        </div>
       </div>
-    </button>
-  </div>
-</div>
-
+      <h1>Welcome, {currUser.name}</h1>
+      <Link as = {`user/${currUser.id}`} href="/user/[something]">Link</Link>
+      <img src={currUser.profile_picture} alt="profile picture" />
     </>
-  )
+  );
 }
-
+}

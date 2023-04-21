@@ -35,10 +35,12 @@ export default function index({trails}){
                 <div className="card w-96 bg-base-100 shadow-xl">
                 <figure><img src={trail.thumbnail} alt="Trail Thumbnail" /></figure>
                 <div className="card-body">
+                <Link as = {`trail/${trail.id}`} href="/trail/[id]">
                  <h2 className="card-title">
                  {trail.name}
-                 <button className="btn btn-secondary">Votes</button>
                     </h2>
+                    </Link>
+                 <button className="btn btn-secondary">Votes</button>
                 <p>{trail.city}, {trail.region}</p>
                 <div className="card-actions justify-end">
                 <div className="form-control">

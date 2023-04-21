@@ -8,7 +8,7 @@ import { Router, useRouter } from 'next/router'
 
 const inter = Inter({ subsets: ['latin'] })
 
-export default function Home({currUser,loggedIn}) {
+export default function Home({currUser,setcurrUser, loggedIn}) {
   const router = useRouter()
   // if(!currUser){
   //   router.push('/userlogin')
@@ -16,23 +16,35 @@ export default function Home({currUser,loggedIn}) {
   // }
   const [user, setUser] = useState(null);
   const [username, setUsername] = useState("");
+  const [newusername, setNewUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [newpassword, setNewPassword] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [profilePicture, setProfilePicture] = useState("");
   const [display, setDisplay] = useState("Hello")
   const [num, setNum] = useState(0)
   
   console.log(currUser,loggedIn)
-  
+  if(currUser){
+    console.log("Pushing")
+    router.push('/home')
+    }
   // useEffect(()=>{
   //   fetch('/checklogin')
   //   .then(r => r.json())
   //   .then(user => setUser(user))
   // },[])
-  function handleSubmit(e) {
+  function handleSubmitlogin(e) {
     console.log("submitting...")
     e.preventDefault();
     const data = {
       "name": username,
-      "password": password
+      "username": username,
+      "password": password,
+      "email": email,
+      "profile_picture": profilePicture,
+
     }
     
     
@@ -44,10 +56,68 @@ export default function Home({currUser,loggedIn}) {
         body: JSON.stringify(data),
       })
     .then(r => r.json())
-    .then(user=>setUser(user))
+    .then(user=>{setcurrUser(user)
+    console.log(currUser,"inside1")}
+    )
     .then(() => {
+      console.log(currUser)
+      if(currUser){
       console.log("Pushing")
       router.push('/home')
+      }else{
+      console.log("invalid login")
+    }
+    })
+
+    
+  }
+  function handleSubmitnewuser(e) {
+    console.log("submitting...")
+    e.preventDefault();
+    const data = {
+      "name": name,
+      "password": newpassword,
+      "email": email,
+      "username":newusername,
+      "profile_picture":profilePicture,
+
+    }
+    
+    
+    fetch("/newuser",{
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+    .then(r => r.json())
+    .then(user=>setUser(user))
+    .then(() => {
+      console.log(user, "in handle submit new")
+      console.log("new guy on the block")
+      fetch("/login",{
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+    .then(r => r.json())
+    .then(user=>{
+      setcurrUser(user)
+      setUser(user)
+      console.log("1")
+    })
+    .then(() => {
+      console.log("2")
+      
+      console.log("invalid login")
+    })
+      
+      // handlelogin()
+
+      
     })
 
     
@@ -61,6 +131,7 @@ export default function Home({currUser,loggedIn}) {
         "Content-Type": "application/json",
       },
     })
+    setcurrUser(null)
     router.push('/')
   }
   
@@ -75,9 +146,7 @@ export default function Home({currUser,loggedIn}) {
     return (
     <>
     <h2>Welcome, {currUser.name}!</h2>
-      <form onSubmit={handleLogout}>
-        <button type="submit">Logout</button>
-      </form>
+    <h2>Loading site</h2>
       
     </>
     );
@@ -85,20 +154,61 @@ export default function Home({currUser,loggedIn}) {
     
     return (
       <>
-      <form onSubmit={handleSubmit}>
+      <Link as = {`user/${'test'}`} href="/user/[something]">Link</Link>
+      <form onSubmit={handleSubmitlogin}>
         <p>Username</p>
         <input
+        className="input input-bordered w-full max-w-xs"
           type="text"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
         <p>password</p>
         <input
+        className="input input-bordered w-full max-w-xs"
           type="text"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
         <button type="submit">Login</button>
+      </form>
+      <form onSubmit={handleSubmitnewuser}>
+        <p>Username</p>
+        <input
+        className="input input-bordered w-full max-w-xs"
+          type="text"
+          value={newusername}
+          onChange={(e) => setNewUsername(e.target.value)}
+        />
+        <p>Name</p>
+        <input
+        className="input input-bordered w-full max-w-xs"
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <p>email</p>
+        <input
+        className="input input-bordered w-full max-w-xs"
+          type="text"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <p>password</p>
+        <input
+        className="input input-bordered w-full max-w-xs"
+          type="text"
+          value={newpassword}
+          onChange={(e) => setNewPassword(e.target.value)}
+        />
+        <p>Profile Picture URL</p>
+        <input
+        className="input input-bordered w-full max-w-xs"
+          type="text"
+          value={profilePicture}
+          onChange={(e) => setProfilePicture(e.target.value)}
+        />
+        <button type="submit">Create Account</button>
       </form>
       </>
     )
