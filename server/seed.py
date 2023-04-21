@@ -53,9 +53,9 @@ with app.app_context():
     fake = Faker()
 
     Trail.query.delete()
-    User.query.delete()
-    Comment.query.delete()
-    UserTrail.query.delete()
+    # User.query.delete()
+    # Comment.query.delete()
+    # UserTrail.query.delete()
     lst = []
     with open('trails.csv', mode='r') as f:
         data = csv.DictReader(f)
@@ -80,6 +80,7 @@ with app.app_context():
             features = lst[i]['features'],
             rating = lst[i]['rating'],
             thumbnail = lst[i]['thumbnail'],
+            votes = 0
         )
         trails.append(new_trail)
     pprint.pprint("hi")
@@ -87,48 +88,48 @@ with app.app_context():
     db.session.commit()
     print('trails in table')
 
-    users = []
-    for i in range(50):
-        user = User(
-            name = fake.name(),
-            email = fake.email(),
-            profile_picture = 'https://s14761.pcdn.co/wp-content/uploads/2020/09/Propain-spindrift-cf-2021-enduro-test-review36-810x551.jpg'
+    # users = []
+    # for i in range(50):
+    #     user = User(
+    #         name = fake.name(),
+    #         email = fake.email(),
+    #         profile_picture = 'https://s14761.pcdn.co/wp-content/uploads/2020/09/Propain-spindrift-cf-2021-enduro-test-review36-810x551.jpg'
 
-        )
-        users.append(user)
+    #     )
+    #     users.append(user)
 
-    db.session.add_all(users)
-    db.session.commit()
-    print("tenants created")
+    # db.session.add_all(users)
+    # db.session.commit()
+    # print("tenants created")
 
-    comments = []
-    for i in range(250):
-        comment = Comment(
-            trail_id = random.randint(1,50),
-            user_id = random.randint(1,50),
-            content = fake.word(),
-            votes = random.randint(1,50)
+    # comments = []
+    # for i in range(250):
+    #     comment = Comment(
+    #         trail_id = random.randint(1,50),
+    #         user_id = random.randint(1,50),
+    #         content = fake.word(),
+    #         votes = random.randint(1,50)
 
-        )
-        comments.append(comment)
+    #     )
+    #     comments.append(comment)
 
-    db.session.add_all(comments)
-    db.session.commit()
-    print("comments created")
+    # db.session.add_all(comments)
+    # db.session.commit()
+    # print("comments created")
 
-    usertrails = []
-    for i in range(250):
-        usertrail = UserTrail(
-            user_id = random.randint(1,50),
-            trail_id = random.randint(1,50),
+    # usertrails = []
+    # for i in range(250):
+    #     usertrail = UserTrail(
+    #         user_id = random.randint(1,50),
+    #         trail_id = random.randint(1,50),
             
 
-        )
-        usertrails.append(usertrail)
+    #     )
+    #     usertrails.append(usertrail)
 
-    db.session.add_all(usertrails)
-    db.session.commit()
-    print("user trails in created")
+    # db.session.add_all(usertrails)
+    # db.session.commit()
+    # print("user trails in created")
 
 
     

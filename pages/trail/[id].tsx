@@ -34,7 +34,6 @@
 //       });
 //   }, []);
 
-
 //   if (!trail) {
 //     return <div className="text-dblue">Loading.. </div>;
 //   }
@@ -51,7 +50,7 @@
 //       <p>Pid: {trail.name}</p>
 //       <div className="flex flex-col w-full p-5">
 //         <div className="grid h-80 card  rounded-box place-items-center overflow-hidden ">
-          
+
 //           <img src = {trail.thumbnail} alt = "thumby" className = "rounded-md"/>
 //         </div>
 //         <div className="divider p-5">{trail.name}</div>
@@ -96,6 +95,22 @@ function Trail({ currUser }) {
 
   const { id } = router.query;
 
+  function handleVotes() {
+    let newvotes = trail.votes
+    newvotes += 1;
+    fetch(`/trails/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify({
+        votes: newvotes,
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    })
+      .then((response) => response.json())
+      .then((json) => console.log(json));
+  }
+
   useEffect(() => {
     fetch(`/trails/${id}`)
       .then((r) => r.json())
@@ -104,7 +119,6 @@ function Trail({ currUser }) {
         console.log(trail);
       });
   }, []);
-
 
   if (!trail) {
     return <div className="text-dblue">Loading.. </div>;
@@ -122,17 +136,26 @@ function Trail({ currUser }) {
       <p>Pid: {trail.name}</p>
       <div className="flex flex-col w-full p-5">
         <div className="grid h-80 card  rounded-box place-items-center overflow-hidden ">
-          
-          <img src = {trail.thumbnail} alt = "thumby" className = "rounded-md"/>
+          <img src={trail.thumbnail} alt="thumby" className="rounded-md" />
         </div>
-        <div className="divider p-5">{trail.name}</div>
+        <div className="divider p-5">
+          {trail.name}
+          <div className="badge badge-md">{trail.rating}</div>
+          <button className="btn btn-outline btn-primary" onClick={handleVotes}>
+            {trail.votes}
+          </button>
+        </div>
         <div className="grid h-60 card bg-base-300 rounded-box place-items-center p-5">
-          <p className = "p-3">{trail.description}</p>
+          <p className="p-3">{trail.description}</p>
         </div>
         <div className="divider p-5">Reviews</div>
-        <div className="grid card bg-base-300 rounded-box place-items-center p-5">This will be comments</div>
-        <div className="divider p-5">Reviews</div>
-        <Weather lat = {trail.lat} lon = {trail.lon}/>
+        <div className="grid card bg-base-300 rounded-box place-items-center p-5">
+          This will be comments
+        </div>
+        <div className="divider p-5">Weather</div>
+        <div className="flex flex-col place-items-center w-full p-5">
+          <Weather lat={trail.lat} lon={trail.lon} />
+        </div>
       </div>
     </>
   );

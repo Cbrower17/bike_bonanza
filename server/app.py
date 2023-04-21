@@ -49,11 +49,35 @@ api.add_resource(AllTrails, '/trails')
 
 class TrailById(Resource):
     def get(self, id):
-        trail = Trail.query.filter_by(id=id).first()
-        if trail:
-            return make_response(trail.to_dict(), 200)
-        else:
-            return make_response({"error": "Not a valid trail"})
+        try:
+            trail = Trail.query.filter_by(id=id).first()
+            if trail:
+                return make_response(trail.to_dict(), 200)
+        except Exception as e:
+            return make_response({
+                "errors": [e.__str__()]
+            }, 400)
+    def patch(self, id):
+        try:
+            trail = Trail.query.filter_by(id=id).first()
+            for attr in request.get_json():
+                setattr(trail, attr, request.get_json()[attr])
+
+            db.session.add(trail)
+            db.session.commit()
+
+            response_dict = trail.to_dict()
+
+            response = make_response(
+                response_dict,
+                200
+            )
+        except Exception as e:
+            return make_response({
+                "errors": [e.__str__()]
+            }, 400)
+
+        return response
 
 
 api.add_resource(TrailById, '/trails/<int:id>')
