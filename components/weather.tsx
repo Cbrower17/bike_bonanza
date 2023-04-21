@@ -7,7 +7,7 @@ import { use } from 'react'
 import Trails from '../pages/Trails'
 import {useState} from 'react'
 
-export default function Weather(){
+export default function Weather({lat,lon}){
     const [location,setLocation] = useState("");
     const [temperature,setTemperature] = useState("");
     const [description, setDescription] = useState("");
@@ -29,7 +29,7 @@ const options = {
 
 
 
-fetch('https://weatherapi-com.p.rapidapi.com/current.json?q=37.687917%2C%20-112.336111', options)
+fetch(`https://weatherapi-com.p.rapidapi.com/current.json?q=${lat}%2C%20${lon}`, options)
 	.then(response => response.json())
 	.then(data => {
         setLocation(data.location.name);

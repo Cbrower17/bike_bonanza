@@ -56,7 +56,7 @@ class TrailById(Resource):
             return make_response({"error": "Not a valid trail"})
 
 
-api.add_resource(TrailById, '/trailstest/<int:id>')
+api.add_resource(TrailById, '/trails/<int:id>')
 
 # routes for users Get, Get by ID and Posting a new user
 
